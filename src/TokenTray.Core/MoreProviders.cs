@@ -133,7 +133,7 @@ public sealed class AntigravityProvider(Func<string?>? readCredential = null) : 
 /// sign-in, no request) and the Grok Build CLI's own token (live, the billing endpoint behind its
 /// /usage panel). The cache goes first because it costs nothing; a stale cache defers to the CLI.
 /// </summary>
-public sealed class GrokProvider(Func<string>? dataDir = null, Func<string?>? authPath = null) : IUsageProvider
+public sealed class GrokProvider(Func<string?>? authPath = null, Func<string>? dataDir = null) : IUsageProvider
 {
     const string BillingUrl = "https://cli-chat-proxy.grok.com/v1/billing?format=credits";
     const string SlotKey = "sand.client.slice.client-meta.account-slot";

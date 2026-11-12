@@ -107,7 +107,7 @@ public class MoreProviderTests
             var auth = Path.Combine(dir.FullName, "auth.json");
             File.WriteAllText(auth, """{"https://auth.x.ai::c":{"key":"tok","expires_at":"2020-01-01T00:00:00Z"}}""");
 
-            var s = await new GrokProvider(() => dir.FullName, () => auth).FetchAsync(default);
+            var s = await new GrokProvider(authPath: () => auth, dataDir: () => dir.FullName).FetchAsync(default);
             Assert.Equal(SnapshotStatus.Ok, s.Status);
             Assert.Equal(12.5, s.Windows.Single().UsedPercent);
             Assert.Equal("Premium", s.Plan);
@@ -129,7 +129,7 @@ public class MoreProviderTests
                 BotCache(80, readAt, readAt + 5 * 86400000, readAt + 3_600_000));
 
             // With no CLI sign-in at all, the expired numbers still stand, marked old with the reason.
-            var s = await new GrokProvider(() => dir.FullName, () => Path.Combine(dir.FullName, "none.json")).FetchAsync(default);
+            var s = await new GrokProvider(authPath: () => Path.Combine(dir.FullName, "none.json"), dataDir: () => dir.FullName).FetchAsync(default);
             Assert.True(s.Stale);
             Assert.Contains("isn't running", s.Message!);
             Assert.Equal(80, s.Windows.Single().UsedPercent);
